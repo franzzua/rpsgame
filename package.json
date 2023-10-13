@@ -1,0 +1,20 @@
+{
+  "name": "kleros-d",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@cmmn/cell": "1.8.0",
+    "@craftamap/esbuild-plugin-html": "0.6.1",
+    "esbuild": "0.19.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "web3": "4.1.2"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^18.2.13"
+  }
+}

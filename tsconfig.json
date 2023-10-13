@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "target": "es5",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
