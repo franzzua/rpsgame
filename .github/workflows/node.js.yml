@@ -32,6 +32,8 @@ jobs:
       run: |
         npm i
         node .scripts/build.js
+        cp .scripts/routes.json dist/routes.json
+
     - name: Azure Static Web Apps Deploy
       uses: Azure/static-web-apps-deploy@v1
       with:
