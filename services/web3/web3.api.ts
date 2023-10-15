@@ -1,6 +1,6 @@
 import {Game, GameId, GameResult, Move} from "../../model/model";
 import {Api} from "../api";
-import {Factory, getRPS, RPS, StartedGameInfo} from "./contracts";
+import {getRPS, RPS, StartedGameInfo} from "./contracts";
 
 export class Web3Api extends Api {
     private rps: StartedGameInfo['rps'];
