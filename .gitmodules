@@ -1,0 +1,3 @@
+[submodule "hardhat/contracts"]
+	path = hardhat/contracts
+	url = https://github.com/clesaege/RPS
