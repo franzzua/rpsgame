@@ -32,7 +32,7 @@ jobs:
       run: |
         npm i
         node .scripts/build.js
-        cp .scripts/routes.json dist/routes.json
+        cp .scripts/routes.json dist/staticwebapp.config.json
 
     - name: Azure Static Web Apps Deploy
       uses: Azure/static-web-apps-deploy@v1
@@ -52,7 +52,7 @@ jobs:
         # Directory location of the compiled application code after building
         output_location: dist
         # Directory location where the routes.json file can be found in the source code
-        routes_location: dist
+        # routes_location: dist
         # Skips the build step for the application source code if set to true.
         skip_app_build: true
         skip_api_build: true

@@ -2,6 +2,8 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 
+process.env.MUMBAI_PRIVATE_KEY ??= '';
+
 const config: HardhatUserConfig = {
   solidity: "0.4.26",
 
