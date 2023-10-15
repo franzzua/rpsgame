@@ -6,7 +6,13 @@
     "target": "es5",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "@contracts/*": [
+        "./hardhat/deployments/ganache/*",
+        "./hardhat/artifacts/contracts/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules"

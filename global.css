@@ -2,3 +2,14 @@ html, body{
     border: none;
     margin: 0;
 }
+
+select, input {
+    padding: 8px 16px;
+    border-radius: 1em;
+    background: #CCC;
+    box-shadow: #222 0px 4px 8px;
+}
+
+select:focus, input:focus{
+    box-shadow: #000 0px 6px 8px;
+}

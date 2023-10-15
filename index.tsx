@@ -1,10 +1,7 @@
+import "./ioc";
 import {createRoot} from 'react-dom/client';
-import {Game} from "./game/game";
+import {GameApp} from "./components/game.app";
 
-createRoot(document.body).render(<App/>);
-
-function App(){
-    return <>
-        <Game/>
-    </>;
-}
+createRoot(document.body).render(<>
+    <GameApp/>
+</>);
