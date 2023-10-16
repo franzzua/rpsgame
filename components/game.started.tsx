@@ -1,25 +1,23 @@
 import {useEffect, useState} from "react";
+import Web3 from "web3";
 import {useCell} from "../helpers/use-cell";
-import {Move} from "../model/model";
 import style from "./game.module.css";
 import {gameStore} from "../services/game.store";
 
 export const GameStarted = () => {
 
-    const game = useCell(() => gameStore.api.get()?.game);
-    const start = useCell(() => gameStore.startTime);
-    const [time, setTime] = useState(new Date());
+    const info = useCell(() => gameStore.info.get());
+    const [timeLeft, setTimeLeft] = useState(gameStore.timeLeftInSeconds);
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setTime(new Date());
+            setTimeLeft(gameStore.timeLeftInSeconds);
         }, 1000);
         return () => clearInterval(intervalId)
     }, []);
-    const timeLeft = 5*60 - (+time - +start)/1000;
-    if (!game) return <></>;
+    if (!info) return <></>;
     return <div className={style.container}>
-        Game {game.id}
-        <div>You stake {game.stake} ETH on {Move[game.move]} with {game.address}</div>
+        Game
+        <div>You stake {Web3.utils.fromWei(info.stake, 'ether')} ETH on with {info.j2}</div>
         {timeLeft > 0 && <div>Wait patiently {timeLeft} seconds...</div>}
         <button onClick={gameStore.checkResult}>Check result</button>
     </div>

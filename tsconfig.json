@@ -3,7 +3,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "es2020",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "sourceMap": true,

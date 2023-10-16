@@ -1,28 +1,24 @@
-import hex from "hex-encoding";
 import Web3, {Contract} from 'web3';
 import hasher from '@contracts/Hasher.json' ;
 import rps from '@contracts/RPS.sol/RPS.json' ;
-import {Move} from "../../model/model";
+import {Game, Move} from "../model/model";
 import '@metamask/detect-provider';
-import {accountService} from "../account.service";
+import {accountService} from "./account.service";
 
 const web3 = new Web3(window.ethereum);
 export const Hasher = new web3.eth.Contract<typeof hasher.abi>(hasher.abi, hasher.address);
 export const RPS = (address: string) => new web3.eth.Contract<typeof rps.abi>(rps.abi, address);
 
-export async function getRPS(move: Move, address: string){
-    const salt = crypto.getRandomValues(new Uint8Array(32));
-    const saltHex = '0x'+hex.encode(salt);
-    console.log(saltHex)
-    const hash = await Hasher.methods.hash(move, saltHex).call();
-    console.log(hash)
+export async function deployRPS(game: Game){
+    const hash = await Hasher.methods.hash(game.move, game.salt).call();
     const rpsContract = await new web3.eth.Contract<typeof rps.abi>(rps.abi).deploy({
         data: rps.bytecode,
-        arguments: [saltHex, address]
+        arguments: [hash, game.j2]
     }).send({
-        from: accountService.Account
+        from: accountService.Account,
+        value: game.stake
     });
-    return {rps: rpsContract, address: rpsContract.options.address, saltHex};
+    return rpsContract;
 }
 
 export type StartedGameInfo = {

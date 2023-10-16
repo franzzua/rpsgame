@@ -13,11 +13,13 @@ export type Game = {
     /**
      * Address of second player
      */
-    address: string | undefined;
+    j2: string | undefined;
     /**
      * Amount in ETH
      */
     stake: string | undefined;
+
+    salt: string | undefined;
 }
 
 export enum GameResult {

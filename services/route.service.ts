@@ -14,6 +14,7 @@ class RouteService {
     goTo(path: string[] | string, replace = false){
         if (Array.isArray(path)) path = '/'+path.join('/');
         history[(replace ? 'replaceState' : 'pushState')](null, '', path);
+        this.path = this.getPath();
     }
 }
 

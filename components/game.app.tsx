@@ -7,20 +7,22 @@ import {gameStore} from "../services/game.store";
 
 export const GameApp = () => {
     const state = useCell(() => gameStore.state);
+    const player = useCell(() => gameStore.player);
     switch (state) {
         case 'initial':
             return <>
                 <button onClick={gameStore.create}>Create Game</button>
-                <button onClick={gameStore.join}>Join Game</button>
             </>;
         case 'created':
             return <GameCreated/>;
-        case 'starting':
-            return `Game is starting...`;
-        case 'joined':
-            return <GameJoined/>;
+        case 'loading':
+            return `Game is loading...`;
         case 'started':
-            return <GameStarted/>;
+            switch (player){
+                case "j1": return <GameStarted/>;
+                case "j2": return <GameJoined/>;
+                case "unknown": return <>Please login as one of players</>;
+            }
         case 'finished':
             return <GameFinished/>;
     }

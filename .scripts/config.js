@@ -6,7 +6,7 @@ export const getConfig = ({prod, watch}) => ({
     bundle: true,
     minify: !!prod,
     sourcemap: !prod,
-    target: ['chrome58'],
+    target: ['chrome88', 'safari14', 'firefox88'],
     outdir: 'dist',
     metafile: true,
     treeShaking: prod,
