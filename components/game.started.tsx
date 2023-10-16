@@ -5,7 +5,6 @@ import style from "./game.module.css";
 import {gameStore} from "../services/game.store";
 
 export const GameStarted = () => {
-
     const info = useCell(() => gameStore.info.get());
     const [timeLeft, setTimeLeft] = useState(gameStore.timeLeftInSeconds);
     useEffect(() => {
@@ -18,6 +17,7 @@ export const GameStarted = () => {
     return <div className={style.container}>
         Game
         <div>You stake {formatEther(info.stake)} ETH on with {info.j2}</div>
+        <div>Send url of this page to second player.</div>
         {timeLeft > 0 && <div>Wait patiently {timeLeft} seconds...</div>}
         <button onClick={gameStore.checkResult}>Check result</button>
     </div>

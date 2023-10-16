@@ -20,9 +20,10 @@ export class Web3Api{
     async getInfo(){
         const j1 = await this.rps.j1() as string;
         const j2 = await this.rps.j2() as string;
+        const c2 = await this.rps.c2();
         const lastAction = new Date(1000*Number(await this.rps.lastAction()));
         const stake = await this.rps.stake() as bigint;
-        return {j1, j2, lastAction, stake};
+        return {j1, j2, c2, lastAction, stake};
     }
 
     async solve(move: Move, salt: string){
@@ -47,4 +48,5 @@ export class Web3Api{
         const c2 = await this.rps.c2();
         return !!c2;
     }
+
 }
