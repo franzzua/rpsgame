@@ -2,6 +2,7 @@ import {JSX} from "react";
 import {formatEther, parseEther} from "ethers";
 import {useCell} from "../helpers/use-cell";
 import {Move} from "../model/model";
+import {Button} from "./button";
 import style from "./game.module.css";
 import {gameStore} from "../services/game.store";
 
@@ -20,7 +21,7 @@ export const GameCreated = () => {
 
 const StartGameButton = () => {
     const isValid = useCell(() => gameStore.isValid);
-    return <button onClick={gameStore.start} disabled={!isValid}>Start Game</button>
+    return <Button onClick={gameStore.start} disabled={!isValid}>Start Game</Button>
 }
 
 export const SelectMove = (props: JSX.IntrinsicElements["select"]) => <select {...props}>
