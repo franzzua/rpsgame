@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import Web3 from "web3";
+import {formatEther, parseEther} from "ethers";
 import {useCell} from "../helpers/use-cell";
 import {Move} from "../model/model";
 import {gameStore} from "../services/game.store";
@@ -20,7 +20,7 @@ export const GameJoined = () => {
     if (info.stake == '0') return <>Game is finished</>;
     return <div className={style.container}>
         Game
-        <div>You going to join game with {Web3.utils.fromWei(info.stake, 'ether')} ETH with {info.j1}</div>
+        <div>You going to join game with {formatEther(info.stake)} ETH with {info.j1}</div>
         {timeLeft > 0 && <div>Left {timeLeft} seconds...</div>}
         <SelectMove value={selected} onChange={e => setSelected(+e.currentTarget.value)}/>
         <button disabled={selected === Move.Null}

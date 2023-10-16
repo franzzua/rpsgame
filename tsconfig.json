@@ -12,7 +12,8 @@
         "./hardhat/deployments/localhost/*",
         "./hardhat/deployments/mumbai/*",
         "./hardhat/deployments/ganache/*",
-        "./hardhat/artifacts/contracts/*"
+        "./hardhat/artifacts/contracts/*",
+        "./hardhat/typechain-types"
       ]
     }
   },

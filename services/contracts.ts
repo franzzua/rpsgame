@@ -1,28 +1,23 @@
-import Web3, {Contract} from 'web3';
-import hasher from '@contracts/Hasher.json' ;
-import rps from '@contracts/RPS.sol/RPS.json' ;
+import hasherJSON from '@contracts/Hasher.json' ;
+import rpsJSON from '@contracts/RPS.sol/RPS.json' ;
 import {Game, Move} from "../model/model";
 import '@metamask/detect-provider';
-import {accountService} from "./account.service";
+import {BrowserProvider, Contract, ContractFactory} from "ethers";
+import type {Hasher} from "@contracts/Hasher"
+import type {RPS} from "@contracts/RPS"
+export type {RPS} from "@contracts/RPS"
 
-const web3 = new Web3(window.ethereum);
-export const Hasher = new web3.eth.Contract<typeof hasher.abi>(hasher.abi, hasher.address);
-export const RPS = (address: string) => new web3.eth.Contract<typeof rps.abi>(rps.abi, address);
+const web3 = new BrowserProvider(window.ethereum);
+export const hasher = new Contract(hasherJSON.address, hasherJSON.abi, web3) as Hasher;
+export const getRPS = async (address: string) => new Contract(address, rpsJSON.abi, await web3.getSigner()) as RPS;
 
 export async function deployRPS(game: Game){
-    const hash = await Hasher.methods.hash(game.move, game.salt).call();
-    const rpsContract = await new web3.eth.Contract<typeof rps.abi>(rps.abi).deploy({
-        data: rps.bytecode,
-        arguments: [hash, game.j2]
-    }).send({
-        from: accountService.Account,
+    const hash = await hasher.hash(game.move, game.salt);
+    console.log(hash);
+    const factory = new ContractFactory(rpsJSON.abi, rpsJSON.bytecode, await web3.getSigner());
+    const rpsContract = await factory.deploy(hash, game.j2, {
         value: game.stake
-    });
+    }) as RPS;
+    await rpsContract.waitForDeployment();
     return rpsContract;
-}
-
-export type StartedGameInfo = {
-    rps: Contract<typeof rps.abi>;
-    address: string;
-    saltHex: string;
 }

@@ -1,6 +1,5 @@
 import {AsyncCell, bind, cell, Fn} from "@cmmn/cell/lib";
 import hex from "hex-encoding";
-import Web3 from "web3";
 import {accountService} from "./account.service";
 import {Game, GameResult, Move} from "../model/model";
 import {routeService} from "./route.service";
@@ -79,9 +78,9 @@ class GameStore {
         const saltHex = '0x'+hex.encode(salt);
         this.gameCreate ={
             id: Fn.ulid(),
-            stake: Web3.utils.toWei(1, 'ether'),
-            move: Move.Lizard,
-            j2: '0xFd3345DF48c86B2baBbC0218f8CA029411B5b610',
+            stake: undefined,
+            move: undefined,
+            j2: undefined,
             salt: saltHex
         };
         this.state = 'created';
@@ -92,8 +91,8 @@ class GameStore {
         this.state = 'loading';
         try {
             const api = await Web3Api.Start(this.gameCreate);
-            localStorage.setItem('game', JSON.stringify(this.gameCreate))
-            routeService.goTo([api.rps.options.address])
+            localStorage.setItem('game', JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move}))
+            routeService.goTo([await api.getAddress()])
         }catch (e){
             this.state = 'created';
             console.error(e);

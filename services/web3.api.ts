@@ -1,10 +1,13 @@
-import Web3 from "web3";
 import {Game, GameId, Move} from "../model/model";
 import {accountService} from "./account.service";
-import {deployRPS, RPS, StartedGameInfo} from "./contracts";
+import {deployRPS, getRPS, RPS} from "./contracts";
 
 export class Web3Api{
-    private constructor(public rps: StartedGameInfo['rps']) {
+    private constructor(private rps: RPS) {
+    }
+
+    public getAddress(){
+        return this.rps.getAddress()
     }
 
     public static async Start(game: Game) {
@@ -12,7 +15,7 @@ export class Web3Api{
         return new Web3Api(rps);
     }
     public static async Open(rpsAddress: string) {
-        const rps = RPS(rpsAddress);
+        const rps = await getRPS(rpsAddress);
         return new Web3Api(rps);
     }
 
@@ -21,19 +24,15 @@ export class Web3Api{
     }
 
     async getInfo(){
-        const j1 = await this.rps.methods.j1().call() as string;
-        const j2 = await this.rps.methods.j2().call() as string;
-        const lastAction = new Date(1000*Number(await this.rps.methods.lastAction().call()));
-        const stake = await this.rps.methods.stake().call() as bigint;
+        const j1 = await this.rps.j1() as string;
+        const j2 = await this.rps.j2() as string;
+        const lastAction = new Date(1000*Number(await this.rps.lastAction()));
+        const stake = await this.rps.stake() as bigint;
         return {j1, j2, lastAction, stake};
     }
 
     async solve(move: Move, salt: string){
-        const gas = await this.rps.methods.solve(move, salt).estimateGas();
-        await this.rps.methods.solve(move, salt).send({
-            from: accountService.Account,
-            gas: gas*5n
-        });
+        await this.rps.solve(move, salt);
     }
 
     async checkJ2Timeout() {
@@ -51,15 +50,8 @@ export class Web3Api{
     }
 
     async makeMove(move: Move, stake: bigint) {
-        const gas = await this.rps.methods.play(+move).estimateGas({
+        await this.rps.play(+move, {
             value: stake,
-        });
-        console.log(gas, gas*5n);
-        await this.rps.methods.play(+move).send({
-            from: accountService.Account.toLowerCase(),
-            value: stake,
-            gasPrice: Web3.utils.toWei(20, 'gwei'),
-            gas: gas*5n
         });
     }
 

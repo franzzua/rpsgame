@@ -1,5 +1,5 @@
 import {JSX} from "react";
-import Web3 from "web3";
+import {formatEther, parseEther} from "ethers";
 import {useCell} from "../helpers/use-cell";
 import {Move} from "../model/model";
 import style from "./game.module.css";
@@ -13,7 +13,7 @@ export const GameCreated = () => {
         <input placeholder="Select address" value={game.j2} type='search'
                onChange={e => gameStore.patch({j2: e.currentTarget.value})}/>
         <input type="number" step="0.0001" placeholder="Stake amount in ETH"
-               onChange={e => gameStore.patch({stake: Web3.utils.toWei(e.currentTarget.value, 'ether')})}/>
+               onChange={e => gameStore.patch({stake: parseEther(e.currentTarget.value)})}/>
         <StartGameButton/>
     </div>
 }
