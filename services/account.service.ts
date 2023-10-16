@@ -5,9 +5,13 @@ class AccountService {
     public Account: string | undefined;
 
     constructor() {
-        window.ethereum.on('chainChanged', this.handleChainChanged);
-        window.ethereum.on('accountsChanged', this.handleAccountsChanged);
-        this.getAccounts().catch();
+        try {
+            window.ethereum.on('chainChanged', this.handleChainChanged);
+            window.ethereum.on('accountsChanged', this.handleAccountsChanged);
+            this.getAccounts().catch();
+        }catch (e){
+
+        }
     }
 
     public async getAccounts() {

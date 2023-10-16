@@ -3,21 +3,15 @@ import {accountService} from "./account.service";
 import {deployRPS, getRPS, RPS} from "./contracts";
 
 export class Web3Api{
-    private constructor(private rps: RPS) {
+    public constructor(private rps: RPS) {
     }
 
     public getAddress(){
         return this.rps.getAddress()
     }
 
-    public static async Start(game: Game) {
-        const rps = await deployRPS(game);
-        return new Web3Api(rps);
-    }
-    public static async Open(rpsAddress: string) {
-        const rps = await getRPS(rpsAddress);
-        return new Web3Api(rps);
-    }
+    public static Start: (game: Game) => Promise<Web3Api>;
+    public static Open: (rpsAddress: string) => Promise<Web3Api>;
 
     async joinGame(game: Game): Promise<void> {
 
@@ -36,17 +30,11 @@ export class Web3Api{
     }
 
     async checkJ2Timeout() {
-        const gas = await this.rps.methods.j2Timeout().estimateGas();
-        await this.rps.methods.j2Timeout().send({
-            from: accountService.Account,
-            gas: gas.toString()
-        });
+        await this.rps.j2Timeout();
     }
 
     async checkJ1Timeout() {
-        await this.rps.methods.j1Timeout().send({
-            from: accountService.Account
-        });
+        await this.rps.j1Timeout();
     }
 
     async makeMove(move: Move, stake: bigint) {
@@ -55,9 +43,8 @@ export class Web3Api{
         });
     }
 
-    selectPlayer(gameId: GameId, address: string): void {
-    }
-
-    stake(gameId: GameId, amount: string): void {
+    async haveSecondMoved(){
+        const c2 = await this.rps.c2();
+        return !!c2;
     }
 }

@@ -12,6 +12,8 @@ class GameStore {
         return accountService.Account;
     }
 
+    public TIMEOUT = 300;
+
     @cell
     public get gameAddress(){
         return routeService.path[0];
@@ -91,17 +93,12 @@ class GameStore {
         this.state = 'loading';
         try {
             const api = await Web3Api.Start(this.gameCreate);
-            localStorage.setItem('game', JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move}))
+            localStorage['game'] = JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move});
             routeService.goTo([await api.getAddress()])
         }catch (e){
             this.state = 'created';
             console.error(e);
-            if (Notification.permission !== "granted")
-                await Notification.requestPermission();
-            new Notification(`Starting game failed`,{
-                body: e.message,
-                vibrate: 10
-            });
+            await this.showError(`Create game failed`, e);
         }
     }
 
@@ -112,6 +109,8 @@ class GameStore {
         const api = this.api.get();
         // await api.checkJ1Timeout();
         await api.makeMove(move, info.stake);
+        this.info.set(await api.getInfo());
+        // refresh info and lastAction time
     }
 
     @bind
@@ -119,23 +118,51 @@ class GameStore {
         const info = this.info.get();
         const api = this.api.get();
         if (!info) return;
-        // if (+info.lastAction + 300000 < +new Date()) {
-        //     try {
-        //         switch (this.player) {
-        //             case "j1":
-        //                 await api.checkJ2Timeout();
-        //                 break;
-        //             case "j2":
-        //                 await api.checkJ1Timeout();
-        //                 break;
-        //         }
-        //         this.state = 'finished';
-        //     }catch (e){
-        //
-        //     }
-        // }
-        const game = JSON.parse(localStorage.getItem('game')) as Game;
+        if (+info.lastAction + this.TIMEOUT * 1000 < +new Date()) {
+            try {
+                switch (this.player) {
+                    case "j1":
+                        await api.checkJ2Timeout();
+                        break;
+                    case "j2":
+                        await api.checkJ1Timeout();
+                        break;
+                }
+                this.state = 'finished';
+            } catch (e) {
+                await this.showError(`Wait another player action patiently, please.`)
+            }
+            return;
+        }
+        if (this.player !== "j1")
+            throw new Error(`Only first player is able to solve game`);
+        if (!(await api.haveSecondMoved())) {
+            await this.showError(`Second player have not moved yet. Wait patiently, please.`)
+            return;
+        }
+        const game = await this.readPersistedGame();
+        if (!game)
+            return;
         await api.solve(game.move, game.salt);
+        this.state = 'finished';
+    }
+
+    private async showError(message: string, error?: Error){
+        if (!globalThis.Notification)
+            throw error ?? new Error(message);
+        if (globalThis.Notification.permission !== "granted")
+            await Notification.requestPermission();
+        new globalThis.Notification(message,{
+            vibrate: 10
+        });
+    }
+
+    private async readPersistedGame(){
+        try {
+            return JSON.parse(localStorage['game']) as Game;
+        } catch (e) {
+            await this.showError(`Persisted game is lost or corrupted. `)
+        }
     }
 
 }

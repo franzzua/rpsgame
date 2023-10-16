@@ -31,7 +31,9 @@ jobs:
     - name: build app
       run: |
         npm i
-        node .scripts/build.js
+        npm run bundle
+        npm run test
+        npm run build
         cp .scripts/routes.json dist/staticwebapp.config.json
 
     - name: Azure Static Web Apps Deploy

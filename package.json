@@ -4,6 +4,9 @@
   "description": "",
   "scripts": {
     "watch": "node .scripts/watch.js",
+    "bundle": "node .scripts/bundle.js",
+    "build": "node .scripts/build.js",
+    "test": "node test/game.spec.js",
     "ganache": "ganache-cli --account=\"0xa820a772525b69a6d6e788b7a7cfe12757a99a59f4436b2a3ff6227d009c9041,0x056bc75e2d63100000\" --account=\"0x485bbd860b34e0cd15720392e0119b18ee79a82dcff8de459737b6bd135e43ad,0x056bc75e2d63100000\""
   },
   "author": "",
@@ -19,6 +22,11 @@
     "react": "18.2.0",
     "ganache": "7.9.1",
     "react-dom": "18.2.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/lib.js"
+    }
   },
   "devDependencies": {
     "@craftamap/esbuild-plugin-html": "0.6.1",
