@@ -111,6 +111,7 @@ class GameStore {
         if (!info) return;
         if (this.player != 'j2') return;
         const api = this.api.get();
+        // await api.checkJ1Timeout();
         await api.makeMove(move, info.stake);
     }
 
@@ -119,21 +120,23 @@ class GameStore {
         const info = this.info.get();
         const api = this.api.get();
         if (!info) return;
-        if (+info.lastAction + 300000 < +new Date()) {
-            try {
-                switch (this.player) {
-                    case "j1":
-                        await api.checkJ2Timeout();
-                        break;
-                    case "j2":
-                        await api.checkJ1Timeout();
-                        break;
-                }
-                this.state = 'finished';
-            }catch (e){
-
-            }
-        }
+        // if (+info.lastAction + 300000 < +new Date()) {
+        //     try {
+        //         switch (this.player) {
+        //             case "j1":
+        //                 await api.checkJ2Timeout();
+        //                 break;
+        //             case "j2":
+        //                 await api.checkJ1Timeout();
+        //                 break;
+        //         }
+        //         this.state = 'finished';
+        //     }catch (e){
+        //
+        //     }
+        // }
+        const game = JSON.parse(localStorage.getItem('game')) as Game;
+        await api.solve(game.move, game.salt);
     }
 
 }

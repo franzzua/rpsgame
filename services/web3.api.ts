@@ -1,3 +1,4 @@
+import Web3 from "web3";
 import {Game, GameId, Move} from "../model/model";
 import {accountService} from "./account.service";
 import {deployRPS, RPS, StartedGameInfo} from "./contracts";
@@ -28,7 +29,11 @@ export class Web3Api{
     }
 
     async solve(move: Move, salt: string){
-
+        const gas = await this.rps.methods.solve(move, salt).estimateGas();
+        await this.rps.methods.solve(move, salt).send({
+            from: accountService.Account,
+            gas: gas*5n
+        });
     }
 
     async checkJ2Timeout() {
@@ -46,11 +51,15 @@ export class Web3Api{
     }
 
     async makeMove(move: Move, stake: bigint) {
-        const gas = await this.rps.methods.play(+move).estimateGas();
+        const gas = await this.rps.methods.play(+move).estimateGas({
+            value: stake,
+        });
+        console.log(gas, gas*5n);
         await this.rps.methods.play(+move).send({
-            from: accountService.Account,
-            value: stake.toString(),
-            gas: gas.toString()
+            from: accountService.Account.toLowerCase(),
+            value: stake,
+            gasPrice: Web3.utils.toWei(20, 'gwei'),
+            gas: gas*5n
         });
     }
 
