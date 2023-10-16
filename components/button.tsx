@@ -8,7 +8,7 @@ export const Button = (props: {
         const result = props.onClick(e) || null;
         if (!!result && (result instanceof Promise)) {
             setLoading(true)
-            result.then(() => setLoading(false));
+            result.catch().then(() => setLoading(false));
         }
     } : undefined, [props.onClick])
     return <button {...props} disabled={loading || props.disabled} onClick={onClickInternal}>

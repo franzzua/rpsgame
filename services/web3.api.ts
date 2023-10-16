@@ -27,7 +27,7 @@ export class Web3Api{
     }
 
     async solve(move: Move, salt: string){
-        await this.rps.solve(move, salt);
+        await this.rps.solve(move, salt).then(x => x?.wait(1));
     }
 
     async checkJ2Timeout() {
@@ -41,7 +41,7 @@ export class Web3Api{
     async makeMove(move: Move, stake: bigint) {
         await this.rps.play(+move, {
             value: stake,
-        });
+        }).then(x => x?.wait(1));
     }
 
     async haveSecondMoved(){

@@ -1,4 +1,5 @@
 import {useCell} from "../helpers/use-cell";
+import {Button} from "./button";
 import {GameCreated} from "./game.created";
 import {GameJoined} from "./game.joined";
 import {GameFinished} from "./gameFinished";
@@ -11,7 +12,7 @@ export const GameApp = () => {
     switch (state) {
         case 'initial':
             return <>
-                <button onClick={gameStore.create}>Create Game</button>
+                <Button onClick={gameStore.create}>Create Game</Button>
             </>;
         case 'created':
             return <GameCreated/>;
