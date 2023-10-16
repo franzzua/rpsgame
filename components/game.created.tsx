@@ -12,7 +12,7 @@ export const GameCreated = () => {
         <SelectMove value={game.move} onChange={e => gameStore.patch({move: +e.currentTarget.value})}/>
         <input placeholder="Select address" value={game.j2} type='search'
                onChange={e => gameStore.patch({j2: e.currentTarget.value})}/>
-        <input placeholder="Stake amount in ETH" value={game.stake}
+        <input placeholder="Stake amount in ETH" value={ Web3.utils.fromWei(game.stake, 'ether')}
                onChange={e => gameStore.patch({stake: Web3.utils.toWei(e.currentTarget.value, 'ether')})}/>
         <StartGameButton/>
     </div>
