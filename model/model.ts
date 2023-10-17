@@ -17,7 +17,7 @@ export type Game = {
     /**
      * Amount in ETH
      */
-    stake: string | undefined;
+    stake: bigint | undefined;
 
     salt: string | undefined;
 }

@@ -1,7 +1,9 @@
 import {AsyncCell, bind, cell, Fn} from "@cmmn/cell/lib";
+import {formatEther, parseEther} from "ethers";
 import hex from "hex-encoding";
 import {accountService} from "./account.service";
 import {Game, Move} from "../model/model";
+import {getBalance} from "./contracts";
 import {routeService} from "./route.service";
 import {Web3Api} from "./web3.api";
 
@@ -94,7 +96,7 @@ class GameStore {
         this.state = 'loading';
         try {
             const api = await Web3Api.Start(this.gameCreate);
-            await this.persistGame();
+            await this.persistGame(this.gameCreate);
             routeService.goTo([await api.getAddress()])
         }catch (e){
             this.state = 'created';
@@ -108,17 +110,24 @@ class GameStore {
         if (!info) return;
         if (this.player != 'j2') return;
         const api = this.api.get();
-        // await api.checkJ1Timeout();
-        await api.makeMove(move, info.stake);
-        this.info.set(await api.getInfo());
-        // refresh info and lastAction time
+        try {
+            await api.makeMove(move, info.stake);
+            this.info.set(await api.getInfo());
+            // refresh info and lastAction time
+        }catch (e){
+            await this.showError(`Transaction failed. Please try again`)
+        }
+        await this.persistGame({
+            move, salt: "", stake: info.stake
+        })
     }
 
     @bind
     public async checkResult(){
-        const info = this.info.get();
         const api = this.api.get();
+        const info = await api.getInfo();
         if (!info) return;
+        this.info.set(info);
         if (+info.lastAction + this.TIMEOUT * 1000 < +new Date()) {
             try {
                 switch (this.player) {
@@ -162,16 +171,42 @@ class GameStore {
         });
     }
 
-    private async persistGame(){
-        localStorage['game'] = JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move});
+    private async persistGame(game: Pick<Game, "salt"|"move"|"stake">){
+        const balance = await getBalance(this.account)
+        localStorage[this.account] = JSON.stringify({
+            salt: game.salt,
+            move: game.move,
+            stake: formatEther(game.stake),
+            balance: formatEther(balance)
+        });
     }
     private async readPersistedGame(){
         try {
-            return JSON.parse(localStorage['game']) as Pick<Game, "salt"|"move">;
+            return JSON.parse(localStorage[this.account]) as Pick<Game, "salt"|"move"> & {
+                stake: string;
+                balance: string
+            };
         } catch (e) {
             await this.showError(`Persisted game is lost or corrupted. `)
         }
     }
+
+    public result = new AsyncCell(async () => {
+        const persisted = await this.readPersistedGame();
+        const balance = await getBalance(this.account);
+        const oldBalance = parseEther(persisted.balance);
+        const stake = parseEther(persisted.stake)
+        if (Math.abs(Number(oldBalance - balance)) < stake/10n){
+            return 'You lose';
+        }
+        if (Math.abs(Number(oldBalance + stake - balance)) < stake/10n){
+            return 'Draw';
+        }
+        if (Math.abs(Number(oldBalance + 2n*stake - balance)) < stake/10n){
+            return 'You win';
+        }
+        return `Check your balance to know who is winner`
+    })
 
 }
 

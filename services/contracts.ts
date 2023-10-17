@@ -21,3 +21,8 @@ export async function deployRPS(game: Game){
     await rpsContract.waitForDeployment();
     return rpsContract;
 }
+
+
+export async function getBalance(account: string){
+    return web3.getBalance(account);
+}

@@ -1,6 +1,11 @@
 html, body{
     border: none;
     margin: 0;
+    background: #444;
+    color: #AAA;
+}
+a{
+    color: #AAA;
 }
 
 select, input, button {
