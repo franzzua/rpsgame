@@ -3,7 +3,7 @@ html, body{
     margin: 0;
 }
 
-select, input {
+select, input, button {
     padding: 8px 16px;
     border-radius: 1em;
     background: #CCC;

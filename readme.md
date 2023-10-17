@@ -4,6 +4,9 @@
 * 1st player can go offline during 2nd player move. 
 * Transactions `play` and `solve` can take long time, another player can send `timeout` transaction with higher fee. 
 
+
+## Exercise J
+
 ### Nash equilibrium in RPSLS.
 Expected utilities for pure strategies:
 1. u1 = -p2+p3+p4-p5
@@ -14,11 +17,11 @@ Expected utilities for pure strategies:
 
 If it's an equilibrium so utilities of pure strategies should be equal. So we have linear equations:
 ```
-    │    1     1    1      1    1  │ = │ 1 │ // sum
-    │   -1    -1    2     -2	2  │ = │ 0 │ // u1 - u2
-p * │    1    -2    1      0	0  │ = │ 0 │ // u1 - u3
-    │   -1     0    0     -1	2  │ = │ 0 │ // u1 - u4
-    │    1    -2    2     -2	1  │ = │ 0 │ // u1 - u5
+    │   1     1    1      1    1  │ = │ 1 │ // sum
+    │  -1    -1    2     -2	2  │ = │ 0 │ // u1 - u2
+p * │   1    -2    1      0	0  │ = │ 0 │ // u1 - u3
+    │  -1     0    0     -1	2  │ = │ 0 │ // u1 - u4
+    │   1    -2    2     -2	1  │ = │ 0 │ // u1 - u5
 ```
 Inverse this matrix and multiple on results vector we will get solution 
 `(0.2, 0.2, 0.2, 0.2, 0.2)`
@@ -27,17 +30,17 @@ It's Mixed Strategies Nash Equilibrium of this game.
 
 ### If we add `well` to this game, matrix will be
 ```
-    │    1     1    1      1    1    1 │ = │ 1 │ // sum
-    │   -1    -1    2     -2	2   -2 │ = │ 0 │ // u1 - u2
-p * │    1    -2    1      0	0    0 │ = │ 0 │ // u1 - u3
-    │   -1     0    0     -1	2    0 │ = │ 0 │ // u1 - u4
-    │    1    -2    2     -2	1    0 │ = │ 0 │ // u1 - u5
-    │    0    -1    1     -1	1   -1 │ = │ 0 │ // u1 - u6
+    │   1     1    1      1    1    1 │ = │ 1 │ // sum
+    │  -1    -1    2     -2	2   -2 │ = │ 0 │ // u1 - u2
+p * │   1    -2    1      0	0    0 │ = │ 0 │ // u1 - u3
+    │  -1     0    0     -1	2    0 │ = │ 0 │ // u1 - u4
+    │   1    -2    2     -2	1    0 │ = │ 0 │ // u1 - u5
+    │   0    -1    1     -1	1   -1 │ = │ 0 │ // u1 - u6
 ```
 But solution will be similar `(0.2, 0.2, 0.2, 0.2, 0.2, 0)`
 
 
-### Task C
+## Exercise I
 
 Let's consider a step at which there are 2<sup>x</sup> players who have [2<sup>y</sup>+1, 2<sup>y</sup>, 2<sup>y</sup>, …, 2<sup>y</sup>] coins and the first player should give two coins to the 2nd one. <br/>
 Next steps will be:<br/>

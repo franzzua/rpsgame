@@ -8,16 +8,16 @@ export const Button = (props: {
         const result = props.onClick(e) || null;
         if (!!result && (result instanceof Promise)) {
             setLoading(true)
-            result.catch().then(() => setLoading(false));
+            result.catch(console.warn).then(() => setLoading(false));
         }
     } : undefined, [props.onClick])
-    return <button {...props} disabled={loading || props.disabled} onClick={onClickInternal}>
+    return <button {...props}  disabled={loading || props.disabled} onClick={onClickInternal}>
         {loading ? <Loader/> : props.children}
     </button>
 }
 
 
-const Loader = () => <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+const Loader = () => <svg width="120" height="1em" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#fff">
     <circle cx="15" cy="15" r="15">
         <animate attributeName="r" from="15" to="15"
                  begin="0s" dur="0.8s"
@@ -28,7 +28,7 @@ const Loader = () => <svg width="120" height="30" viewBox="0 0 120 30" xmlns="ht
                  values="1;.5;1" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+    <circle cx="60" cy="15" r="9" fillOpacity="0.3">
         <animate attributeName="r" from="9" to="9"
                  begin="0s" dur="0.8s"
                  values="9;15;9" calcMode="linear"

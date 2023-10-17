@@ -1,7 +1,7 @@
 import {AsyncCell, bind, cell, Fn} from "@cmmn/cell/lib";
 import hex from "hex-encoding";
 import {accountService} from "./account.service";
-import {Game, GameResult, Move} from "../model/model";
+import {Game, Move} from "../model/model";
 import {routeService} from "./route.service";
 import {Web3Api} from "./web3.api";
 
@@ -20,6 +20,7 @@ class GameStore {
     }
 
     public api = new AsyncCell<Web3Api | undefined>(() => {
+        if (!this.account) return undefined;
         if (!this.gameAddress) return undefined;
         return Web3Api.Open(this.gameAddress);
     });
@@ -93,7 +94,7 @@ class GameStore {
         this.state = 'loading';
         try {
             const api = await Web3Api.Start(this.gameCreate);
-            localStorage['game'] = JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move});
+            await this.persistGame();
             routeService.goTo([await api.getAddress()])
         }catch (e){
             this.state = 'created';
@@ -140,11 +141,15 @@ class GameStore {
             await this.showError(`Second player have not moved yet. Wait patiently, please.`)
             return;
         }
-        const game = await this.readPersistedGame();
-        if (!game)
-            return;
-        await api.solve(game.move, game.salt);
-        this.state = 'finished';
+        try {
+            const game = await this.readPersistedGame();
+            if (!game)
+                return;
+            await api.solve(game.move, game.salt);
+            this.state = 'finished';
+        }catch (e){
+            await this.showError(`Transaction failed. Please try again`)
+        }
     }
 
     private async showError(message: string, error?: Error){
@@ -157,9 +162,12 @@ class GameStore {
         });
     }
 
+    private async persistGame(){
+        localStorage['game'] = JSON.stringify({salt: this.gameCreate.salt, move: this.gameCreate.move});
+    }
     private async readPersistedGame(){
         try {
-            return JSON.parse(localStorage['game']) as Game;
+            return JSON.parse(localStorage['game']) as Pick<Game, "salt"|"move">;
         } catch (e) {
             await this.showError(`Persisted game is lost or corrupted. `)
         }

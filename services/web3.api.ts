@@ -1,5 +1,6 @@
 import {Game, Move} from "../model/model";
 import {RPS} from "@contracts/RPS";
+import {web3} from "./contracts";
 
 export class Web3Api{
     public constructor(private rps: RPS) {
@@ -11,10 +12,6 @@ export class Web3Api{
 
     public static Start: (game: Game) => Promise<Web3Api>;
     public static Open: (rpsAddress: string) => Promise<Web3Api>;
-
-    async joinGame(game: Game): Promise<void> {
-
-    }
 
     async getInfo(){
         const j1 = await this.rps.j1() as string;
