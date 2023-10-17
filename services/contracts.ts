@@ -21,11 +21,3 @@ export async function deployRPS(game: Game){
     await rpsContract.waitForDeployment();
     return rpsContract;
 }
-
-async function sendMessage(to: string, message: string){
-    web3.getSigner().then(s => s.sendTransaction({
-        to: to,
-        value: 0,
-        data: message
-    }));
-}

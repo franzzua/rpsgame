@@ -1,6 +1,5 @@
-import {Game, GameId, Move} from "../model/model";
-import {accountService} from "./account.service";
-import {deployRPS, getRPS, RPS} from "./contracts";
+import {Game, Move} from "../model/model";
+import {RPS} from "@contracts/RPS";
 
 export class Web3Api{
     public constructor(private rps: RPS) {
