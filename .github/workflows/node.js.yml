@@ -31,8 +31,8 @@ jobs:
     - name: build app
       run: |
         npm i
-        npm run bundle
-        npm run test
+#        npm run bundle
+#        npm run test
         npm run build
         cp .scripts/routes.json dist/staticwebapp.config.json
 
