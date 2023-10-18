@@ -1,9 +1,33 @@
+## Rock-Paper-Scissors-Lizard-Spock on Etherium
+
+[demo](https://lemon-bay-0e8c9b803.3.azurestaticapps.net)
+
+### How to:
+* 1st player 
+  * clicks on Create Game on base page
+  * selects his choice
+  * inputs 2nd player's address
+  * select stake in Eth (or in current network token)
+  * after he confirms transaction he will be redirected to game-url
+  * he sends this url to 2nd player (with some external channel: email, messenger...)
+* 2nd player 
+  * opens url and selects his choice
+  * confirms transaction
+* 1st player
+  * clicks on `check result` button after 2nd player confirms transaction or after 5 minutes
+* 2nd player
+  * clicks on `win by timeout` button if 1st player don`t respond in 5 minutes
+
+note: both players can do it in one browser, the app handles account changes
+
 ### Problems:
 * salt is stored in LocalStorage which is unreliable and insecure
   * One can encrypt it with user privateKey, but it's deprecated in MetaMask by security reasons
 * 1st player can go offline during 2nd player move. 
+* 1st player can be without money on the last step and not able to pay for a gas 
 * Transactions `play` and `solve` can take long time, another player can send `timeout` transaction with higher fee. 
-
+* External communication is needed which may be unreliable or slow (can be replaced as Etherium communication)
+* Player discovery not implemented at all - 1st player needs address of 2nd player
 
 ## Exercise J
 
