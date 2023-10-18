@@ -28,6 +28,7 @@ note: both players can do it in one browser, the app handles account changes
 * Transactions `play` and `solve` can take long time, another player can send `timeout` transaction with higher fee. 
 * External communication is needed which may be unreliable or slow (can be replaced as Etherium communication)
 * Player discovery not implemented at all - 1st player needs address of 2nd player
+* Result of the game is not clear for both players - 2nd player is not able to know 1st player`s choice. 
 
 ## Exercise J
 
