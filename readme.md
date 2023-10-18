@@ -51,7 +51,7 @@ p * │   1    -2    1      0	0  │ = │ 0 │ // u1 - u3
 Inverse this matrix and multiply on result vector, and here is a solution: 
 `(0.2, 0.2, 0.2, 0.2, 0.2)`
 
-It's Mixed Strategies Nash Equilibrium of this game.
+It's Mixed Strategies Nash Equilibrium of this game for both players (game is symmetric for both players).
 
 ### If we add `well` to this game, matrix become
 ```
