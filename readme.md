@@ -1,8 +1,8 @@
 ### Problems:
-* salt is stored in LocalStorage which is unreliable and insecure
-  * One can encrypt it with user privateKey, but it's deprecated in MetaMask by security reasons
-* 1st player can go offline during 2nd player move. 
-* Transactions `play` and `solve` can take long time, another player can send `timeout` transaction with higher fee. 
+* salt is stored in LocalStorage which is unreliable and insecure. One can encrypt it with user privateKey, but it's deprecated in MetaMask by security reasons
+* 1st player can go offline during 2nd player move and loose his money. 
+* Transactions `play` and `solve` can take long time, another player can send `timeout` transaction with higher fee.
+
 
 
 ## Exercise J
