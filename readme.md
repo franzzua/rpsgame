@@ -20,6 +20,7 @@
 
 note: both players can do it in one browser, the app handles account changes
 
+
 ### Problems:
 * salt is stored in LocalStorage which is unreliable and insecure
   * One can encrypt it with user privateKey, but it's deprecated in MetaMask by security reasons
