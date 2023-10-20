@@ -28,6 +28,7 @@ jobs:
       run: |
         npm i
         npx hardhat deploy --network mumbai
+
     - name: build app
       run: |
         npm i
